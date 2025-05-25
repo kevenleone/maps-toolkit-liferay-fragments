@@ -1,0 +1,39 @@
+{
+    "fieldSets": [
+        {
+            "label": "Map Settings",
+            "fields": [
+                {
+                    "name": "latitude",
+                    "type": "text",
+                    "label": "Latitude",
+                    "defaultValue": "-8.0636362"
+                },
+                {
+                    "name": "longitude",
+                    "type": "text",
+                    "label": "Longitude",
+                    "defaultValue": "-34.8727905"
+                },
+                {
+                    "name": "zoom",
+                    "label": "Zoom Level",
+                    "type": "text",
+                    "defaultValue": "13"
+                },
+                {
+                    "name": "showMarker",
+                    "type": "checkbox",
+                    "label": "Show Marker",
+                    "defaultValue": true
+                },
+                {
+                    "name": "showUserLocation",
+                    "type": "checkbox",
+                    "label": "Show User Location",
+                    "defaultValue": false
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,74 @@
+{
+    "fieldSets": [
+        {
+            "label": "Map Settings",
+            "fields": [
+                {
+                    "name": "accessToken",
+                    "type": "text",
+                    "label": "Mapbox Access Token",
+                    "defaultValue": ""
+                },
+                {
+                    "name": "latitude",
+                    "type": "text",
+                    "label": "Latitude",
+                    "defaultValue": "-8.0636362"
+                },
+                {
+                    "name": "longitude",
+                    "type": "text",
+                    "label": "Longitude",
+                    "defaultValue": "-34.8727905"
+                },
+                {
+                    "name": "mapStyle",
+                    "label": "Map Style",
+                    "description": "Mapbox Style Map",
+                    "type": "select",
+                    "dataType": "string",
+                    "typeOptions": {
+                        "validValues": [
+                            { "value": "streets-v12", "label": "Streets 1" },
+                            { "value": "outdoors-v12", "label": "Outdoors" },
+                            { "value": "light-v11", "label": "Light" },
+                            { "value": "dark-v11", "label": "Dark" },
+                            { "value": "satellite-v9", "label": "Satellite" },
+                            {
+                                "value": "satellite-streets-v12",
+                                "label": "Satellite Streets"
+                            },
+                            {
+                                "value": "navigation-day-v1",
+                                "label": "Navigation Day"
+                            },
+                            {
+                                "value": "navigation-night-v1",
+                                "label": "Navigation Night"
+                            }
+                        ]
+                    },
+                    "defaultValue": "Streets"
+                },
+                {
+                    "name": "markersJson",
+                    "type": "text",
+                    "label": "Markers JSON",
+                    "defaultValue": "[]"
+                },
+                {
+                    "name": "showUserLocation",
+                    "type": "checkbox",
+                    "label": "Show User Location",
+                    "defaultValue": false
+                },
+                {
+                    "name": "zoom",
+                    "type": "text",
+                    "label": "Zoom Level",
+                    "defaultValue": "13"
+                }
+            ]
+        }
+    ]
+}

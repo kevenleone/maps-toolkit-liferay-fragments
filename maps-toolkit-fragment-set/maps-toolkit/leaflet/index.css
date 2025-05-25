@@ -1,0 +1,8 @@
+#maps-toolkit-leaflet-map {
+    width: 100%;
+    height: 400px;
+}
+
+.leaflet-container {
+    z-index: 0;
+}

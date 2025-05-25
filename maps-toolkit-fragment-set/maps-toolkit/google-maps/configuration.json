@@ -1,0 +1,52 @@
+{
+    "fieldSets": [
+        {
+            "label": "Map Settings",
+            "fields": [
+                {
+                    "name": "accessToken",
+                    "type": "text",
+                    "label": "Google Maps Access Token",
+                    "defaultValue": ""
+                },
+                {
+                    "name": "googleMapsScriptURL",
+                    "type": "text",
+                    "label": "Google Maps Script URL",
+                    "defaultValue": "https://maps.googleapis.com/maps/api/js",
+                    "description": "Change this to use custom Google Maps CDNs or leave as is."
+                },
+                {
+                    "name": "latitude",
+                    "type": "text",
+                    "label": "Latitude",
+                    "defaultValue": "-8.0636362"
+                },
+                {
+                    "name": "longitude",
+                    "type": "text",
+                    "label": "Longitude",
+                    "defaultValue": "-34.8727905"
+                },
+                {
+                    "name": "showMarker",
+                    "type": "checkbox",
+                    "label": "Show Marker",
+                    "defaultValue": true
+                },
+                {
+                    "name": "showUserLocation",
+                    "type": "checkbox",
+                    "label": "Show User Location",
+                    "defaultValue": false
+                },
+                {
+                    "name": "zoom",
+                    "type": "text",
+                    "label": "Zoom Level",
+                    "defaultValue": "13"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+.mapbox-container {
+    border: 1px solid #ccc;
+    height: 600px;
+    width: 100%;
+}
+
+.mapbox-marker {
+    cursor: pointer;
+}
