@@ -16,6 +16,45 @@
                     "defaultValue": "-34.8727905"
                 },
                 {
+                    "label": "Map TyleLayer",
+                    "name": "mapTileLayer",
+                    "description": "Leaflet supports custom TileLayers, have a look https://leaflet-extras.github.io/leaflet-providers/preview",
+                    "type": "select",
+                    "dataType": "string",
+                    "typeOptions": {
+                        "validValues": [
+                            { "value": "default", "label": "Default" },
+                            {
+                                "value": "cartodb.light_all",
+                                "label": "Light All by CartoDB"
+                            },
+                            {
+                                "value": "stadia.alidadesatellite",
+                                "label": "Stadia.AlidadeSatellite"
+                            },
+                            {
+                                "value": "stadia.outdoors",
+                                "label": "Stadia.Outdoors"
+                            },
+                            {
+                                "value": "stadia.alidadesmooth",
+                                "label": "Stadia.AlidadeSmooth"
+                            },
+                            {
+                                "value": "other",
+                                "label": "Other"
+                            }
+                        ]
+                    },
+                    "defaultValue": "default"
+                },
+                {
+                    "name": "customMapTyleLayer",
+                    "type": "text",
+                    "label": "Custom Map Tyle Layer",
+                    "defaultValue": ""
+                },
+                {
                     "name": "zoom",
                     "label": "Zoom Level",
                     "type": "text",
