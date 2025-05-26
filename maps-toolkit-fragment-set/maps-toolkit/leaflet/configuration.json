@@ -4,73 +4,83 @@
             "label": "Map Settings",
             "fields": [
                 {
-                    "name": "latitude",
-                    "type": "text",
+                    "defaultValue": "-8.0636362",
                     "label": "Latitude",
-                    "defaultValue": "-8.0636362"
+                    "name": "latitude",
+                    "type": "text"
                 },
                 {
-                    "name": "longitude",
-                    "type": "text",
+                    "defaultValue": "-34.8727905",
                     "label": "Longitude",
-                    "defaultValue": "-34.8727905"
+                    "name": "longitude",
+                    "type": "text"
                 },
                 {
+                    "dataType": "string",
+                    "defaultValue": "default",
+                    "description": "TileLayers from https://leaflet-extras.github.io/leaflet-providers/preview",
                     "label": "Map TyleLayer",
                     "name": "mapTileLayer",
-                    "description": "Leaflet supports custom TileLayers, have a look https://leaflet-extras.github.io/leaflet-providers/preview",
                     "type": "select",
-                    "dataType": "string",
                     "typeOptions": {
                         "validValues": [
-                            { "value": "default", "label": "Default" },
                             {
-                                "value": "cartodb.light_all",
-                                "label": "Light All by CartoDB"
+                                "label": "Light All by CartoDB",
+                                "value": "cartodb.light_all"
                             },
                             {
-                                "value": "stadia.alidadesatellite",
-                                "label": "Stadia.AlidadeSatellite"
+                                "label": "Default",
+                                "value": "default"
                             },
                             {
-                                "value": "stadia.outdoors",
-                                "label": "Stadia.Outdoors"
+                                "label": "Other",
+                                "value": "other"
                             },
                             {
-                                "value": "stadia.alidadesmooth",
-                                "label": "Stadia.AlidadeSmooth"
+                                "label": "Stadia.AlidadeSatellite",
+                                "value": "stadia.alidadesatellite"
                             },
                             {
-                                "value": "other",
-                                "label": "Other"
+                                "label": "Stadia.AlidadeSmooth",
+                                "value": "stadia.alidadesmooth"
+                            },
+                            {
+                                "label": "Stadia.Outdoors",
+                                "value": "stadia.outdoors"
                             }
                         ]
-                    },
-                    "defaultValue": "default"
+                    }
                 },
                 {
-                    "name": "customMapTyleLayer",
-                    "type": "text",
+                    "defaultValue": "",
+                    "description": "Read this to learn how to create use custom map tyle layers: https://github.com/kevenleone/maps-toolkit-liferay-fragments/blob/main/docs/leaflet.md#how-to-add-custom-map-tyle-layer",
                     "label": "Custom Map Tyle Layer",
-                    "defaultValue": ""
+                    "name": "customMapTyleLayer",
+                    "type": "text"
                 },
                 {
-                    "name": "zoom",
-                    "label": "Zoom Level",
+                    "name": "markersJson",
                     "type": "text",
-                    "defaultValue": "13"
+                    "label": "Markers JSON",
+                    "defaultValue": "[]"
                 },
                 {
-                    "name": "showMarker",
-                    "type": "checkbox",
+                    "defaultValue": "13",
+                    "label": "Zoom Level",
+                    "name": "zoom",
+                    "type": "text"
+                },
+                {
+                    "defaultValue": true,
                     "label": "Show Marker",
-                    "defaultValue": true
+                    "name": "showMarker",
+                    "type": "checkbox"
                 },
                 {
-                    "name": "showUserLocation",
-                    "type": "checkbox",
+                    "defaultValue": false,
                     "label": "Show User Location",
-                    "defaultValue": false
+                    "name": "showUserLocation",
+                    "type": "checkbox"
                 }
             ]
         }

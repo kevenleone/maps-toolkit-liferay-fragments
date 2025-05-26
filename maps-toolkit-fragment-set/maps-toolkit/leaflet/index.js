@@ -4,10 +4,19 @@
         latitude = 37.7749,
         longitude = -122.4194,
         mapTileLayer,
+        markersJson,
         showMarker = true,
         showUserLocation = false,
         zoom = 13,
     } = configuration;
+
+    const safeJSONParse = (value, defaultValue) => {
+        try {
+            return JSON.parse(value);
+        } catch {
+            return defaultValue;
+        }
+    };
 
     const tileLayers = {
         default: {
@@ -70,6 +79,20 @@
             zoom
         );
 
+        function addMarker(marker) {
+            L.marker([marker.latitude, marker.longitude])
+                .addTo(map)
+                .bindPopup(marker.title);
+
+            if (marker.fly) {
+                map.panTo([marker.latitude, marker.longitude]);
+            }
+        }
+
+        Liferay.on("mapbox:add_marker", (event) => {
+            event.details.flat().forEach(addMarker);
+        });
+
         let tileLayer = tileLayers[mapTileLayer] || tileLayers.default;
 
         if (mapTileLayer === "other" && customMapTyleLayer) {
@@ -79,19 +102,29 @@
         L.tileLayer(tileLayer.url, tileLayer.options).addTo(map);
 
         if (showMarker) {
-            L.marker([latitude, longitude])
-                .addTo(map)
-                .bindPopup("You are here!")
-                .openPopup();
+            const markers = safeJSONParse(markersJson, []);
 
-            L.marker([-8.0636362, -34.8727905])
-                .addTo(map)
-                .bindPopup("Your friend is here!")
-                .openPopup();
+            markers.forEach(addMarker);
         }
 
         if (showUserLocation) {
-            map.locate({ setView: true, maxZoom: 10 });
+            map.locate({ watch: false });
+
+            map.on("locationfound", (e) => {
+                L.marker(e.latlng)
+                    .addTo(map)
+                    .bindPopup("You are here")
+                    .openPopup();
+
+                map.panTo(e.latlng);
+
+                L.circle(e.latlng, { radius: e.accuracy }).addTo(map);
+            });
+
+            map.on("locationerror", (e) => {
+                console.error("Location error:", e.message);
+                alert("Unable to retrieve your location.");
+            });
         }
     };
 
