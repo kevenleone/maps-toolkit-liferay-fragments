@@ -71,6 +71,30 @@ Integrates the Leaflet open-source map library for simple, customizable maps.
 
 ---
 
+## Here Maps
+
+![Here Maps Thumbnail](maps-toolkit-fragment-set/maps-toolkit/here-maps/thumbnail.jpeg)
+
+**Description:**
+Integrates HERE Maps into your Liferay pages. Requires a HERE Maps API Key and supports multiple map styles and dynamic markers.
+
+**Configuration Fields:**
+- **Here Maps API Key** (`apiKey`, text): Your HERE Maps API key.
+- **Latitude** (`latitude`, text): Initial latitude for map center (default: `-8.0636362`).
+- **Longitude** (`longitude`, text): Initial longitude for map center (default: `-34.8727905`).
+- **Zoom Level** (`zoom`, text): Initial zoom level (default: `13`).
+- **Show Marker** (`showMarker`, checkbox): Display a marker at the center (default: `true`).
+- **Show User Location** (`showUserLocation`, checkbox): Show the user's current location (default: `false`).
+- **Map Style** (`mapStyle`, select): Choose from various HERE Maps styles:
+  - Normal (`normal`)
+  - Satellite (`satellite`)
+  - Standard (`standard`)
+  - Terrain (`terrain`)
+- **Custom Marker Icon URL** (`defaultMarkerIconURL`, text): URL for custom marker icon (default: `https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/solid/map-pin.svg`).
+- **Dynamic Markers** (`markersJSON`, text): JSON array of markers to display on the map (default: `[]`).
+
+---
+
 ## City Places Preview
 
 **Description:**
