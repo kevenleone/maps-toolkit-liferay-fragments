@@ -8,8 +8,8 @@ const safeJSONParse = (value, defaultValue) => {
 
 let icon;
 
-if (configuration.markerIconURL) {
-    icon = new H.map.Icon(configuration.markerIconURL, {
+if (configuration.defaultMarkerIconURL) {
+    icon = new H.map.Icon(configuration.defaultMarkerIconURL, {
         size: { w: 32, h: 32 },
         anchor: { x: 16, y: 32 },
     });
@@ -20,6 +20,7 @@ const platform = new H.service.Platform({
 });
 
 const defaultLayers = platform.createDefaultLayers();
+
 const mapType = {
     normal: defaultLayers.raster.normal.map,
     satellite: defaultLayers.raster.satellite.map,
@@ -54,10 +55,11 @@ function addMarker({ latitude, longitude, title }) {
 
     marker.setData(title);
 
-    marker.addEventListener("tap", function (evt) {
-        const bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-            content: evt.target.getData(),
+    marker.addEventListener("tap", function (event) {
+        const bubble = new H.ui.InfoBubble(event.target.getGeometry(), {
+            content: event.target.getData(),
         });
+
         ui.addBubble(bubble);
     });
 
