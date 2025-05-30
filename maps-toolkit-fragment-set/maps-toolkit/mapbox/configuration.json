@@ -6,7 +6,7 @@
                 {
                     "name": "accessToken",
                     "type": "text",
-                    "label": "Mapbox Access Token",
+                    "label": "Mapbox API Key",
                     "defaultValue": ""
                 },
                 {
