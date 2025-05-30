@@ -1,0 +1,83 @@
+{
+    "fieldSets": [
+        {
+            "label": "Map Settings",
+            "fields": [
+                {
+                    "name": "apiKey",
+                    "type": "text",
+                    "label": "Here Maps API Key",
+                    "defaultValue": ""
+                },
+                {
+                    "name": "latitude",
+                    "type": "text",
+                    "label": "Latitude",
+                    "defaultValue": "-8.0636362"
+                },
+                {
+                    "name": "longitude",
+                    "type": "text",
+                    "label": "Longitude",
+                    "defaultValue": "-34.8727905"
+                },
+                {
+                    "name": "showMarker",
+                    "type": "checkbox",
+                    "label": "Show Marker",
+                    "defaultValue": true
+                },
+                {
+                    "name": "showUserLocation",
+                    "type": "checkbox",
+                    "label": "Show User Location",
+                    "defaultValue": false
+                },
+                {
+                    "name": "zoom",
+                    "type": "text",
+                    "label": "Zoom Level",
+                    "defaultValue": "13"
+                },
+                {
+                    "name": "mapStyle",
+                    "label": "Map Style",
+                    "type": "select",
+                    "defaultValue": "normal",
+                    "typeOptions": {
+                        "validValues": [
+                            {
+                                "label": "Normal",
+                                "value": "normal"
+                            },
+                            {
+                                "label": "Satellite",
+                                "value": "satellite"
+                            },
+                            {
+                                "label": "Standard",
+                                "value": "standard"
+                            },
+                            {
+                                "label": "Terrain",
+                                "value": "terrain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "markerIconURL",
+                    "label": "Custom Marker Icon URL",
+                    "type": "text",
+                    "defaultValue": "https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/solid/map-pin.svg"
+                },
+                {
+                    "name": "markersJson",
+                    "label": "Dynamic Markers (JSON)",
+                    "type": "text",
+                    "defaultValue": "[]"
+                }
+            ]
+        }
+    ]
+}
