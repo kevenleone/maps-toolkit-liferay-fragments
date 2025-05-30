@@ -33,10 +33,10 @@ const map = new H.Map(
     mapType,
     {
         center: {
-            lat: parseFloat(configuration.latitude) || 0,
-            lng: parseFloat(configuration.longitude) || 0,
+            lat: Number.parseFloat(configuration.latitude) || 0,
+            lng: Number.parseFloat(configuration.longitude) || 0,
         },
-        zoom: parseInt(configuration.zoom || "10"),
+        zoom: Number.parseInt(configuration.zoom || "10"),
         pixelRatio: window.devicePixelRatio || 1,
     }
 );
@@ -45,7 +45,8 @@ H.ui.UI.createDefault(map, defaultLayers);
 
 const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-const markers = safeJSONParse(configuration.markersJson, []);
+const pinnedMarkers = [];
+const defaultMarkers = safeJSONParse(configuration.markersJSON, []);
 
 function addMarker({ latitude, longitude, title }) {
     const marker = new H.map.Marker(
@@ -55,7 +56,7 @@ function addMarker({ latitude, longitude, title }) {
 
     marker.setData(title);
 
-    marker.addEventListener("tap", function (event) {
+    marker.addEventListener("tap", (event) => {
         const bubble = new H.ui.InfoBubble(event.target.getGeometry(), {
             content: event.target.getData(),
         });
@@ -64,25 +65,37 @@ function addMarker({ latitude, longitude, title }) {
     });
 
     map.addObject(marker);
+
+    pinnedMarkers.push(marker);
 }
 
-markers.forEach((marker) => {
-    addMarker(marker);
+Liferay.on("here_maps:add_marker", (event) => {
+    event.details.flat().forEach(addMarker);
+});
+
+Liferay.on("here_maps:fit_to_all_markers", () => {
+    const bounds = new H.geo.Rect(
+        ...markers.reduce((acc, { latitude, longitude }) => {
+            acc.push(latitude, longitude);
+
+            return acc;
+        }, [])
+    );
+
+    map.getViewModel().setLookAtData({ bounds });
 });
 
 if (configuration.showMarker) {
-    addMarker({
-        latitude: parseFloat(configuration.latitude),
-        longitude: parseFloat(configuration.longitude),
-        title: "Default Location",
-    });
+    for (const defaultMarker of defaultMarkers) {
+        addMarker(defaultMarker);
+    }
 }
 
 if (configuration.showUserLocation && navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
         addMarker({
-            latitude: parseFloat(coords.latitude),
-            longitude: parseFloat(coords.longitude),
+            latitude: Number.parseFloat(coords.latitude),
+            longitude: Number.parseFloat(coords.longitude),
             title: "My Location",
         });
 

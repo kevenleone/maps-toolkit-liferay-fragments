@@ -72,7 +72,7 @@
                     "defaultValue": "https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/solid/map-pin.svg"
                 },
                 {
-                    "name": "markersJson",
+                    "name": "markersJSON",
                     "label": "Dynamic Markers (JSON)",
                     "type": "text",
                     "defaultValue": "[]"

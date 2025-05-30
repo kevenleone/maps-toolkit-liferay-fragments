@@ -45,6 +45,12 @@
                     "type": "text",
                     "label": "Zoom Level",
                     "defaultValue": "13"
+                },
+                {
+                    "name": "markersJSON",
+                    "label": "Dynamic Markers (JSON)",
+                    "type": "text",
+                    "defaultValue": "[]"
                 }
             ]
         }

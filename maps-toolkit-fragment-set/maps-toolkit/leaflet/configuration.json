@@ -59,7 +59,7 @@
                     "type": "text"
                 },
                 {
-                    "name": "markersJson",
+                    "name": "markersJSON",
                     "type": "text",
                     "label": "Markers JSON",
                     "defaultValue": "[]"
