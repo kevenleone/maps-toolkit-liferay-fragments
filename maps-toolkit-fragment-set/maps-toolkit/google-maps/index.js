@@ -22,7 +22,7 @@ const center = {
     lng: Number.parseFloat(longitude),
 };
 
-const defaultMarkers = safeJSONParse(configuration.markersJSON, []);
+const defaultMarkers = safeJSONParse(markersJSON, []);
 
 const pinnedMarkers = [];
 
