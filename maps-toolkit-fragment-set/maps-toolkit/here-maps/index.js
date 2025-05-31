@@ -156,4 +156,5 @@ class HereMaps {
 }
 
 const hereMaps = new HereMaps(configuration);
+
 hereMaps.initialize();

@@ -21,8 +21,6 @@ class LeafletMap {
 
         // Instance properties
 
-        this.leafletCSS = null;
-        this.leafletScript = null;
         this.map = null;
         this.pinnedMarkers = [];
         this.tileLayers = {
@@ -69,8 +67,6 @@ class LeafletMap {
                 },
             },
         };
-
-        this.initializeResources();
     }
 
     addMarker({ fly, latitude, longitude, title, openPopup }) {
@@ -98,10 +94,11 @@ class LeafletMap {
 
     fitToAllMarkers() {
         const group = L.featureGroup(this.pinnedMarkers);
+
         this.map.fitBounds(group.getBounds());
     }
 
-    initializeMap() {
+    initialize() {
         this.map = L.map("maps-toolkit-leaflet-map").setView(
             [this.latitude, this.longitude],
             this.zoom
@@ -109,6 +106,7 @@ class LeafletMap {
 
         let tileLayer =
             this.tileLayers[this.mapTileLayer] || this.tileLayers.default;
+
         if (this.mapTileLayer === "other" && this.customMapTyleLayer) {
             tileLayer = JSON.parse(this.customMapTyleLayer);
         }
@@ -118,21 +116,6 @@ class LeafletMap {
         this.setupEventListeners();
         this.setupDefaultMarkers();
         this.setupUserLocation();
-    }
-
-    initializeResources() {
-        this.leafletCSS = document.createElement("link");
-        this.leafletScript = document.createElement("script");
-
-        this.leafletCSS.rel = "stylesheet";
-        this.leafletCSS.href =
-            "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-        this.leafletScript.src =
-            "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-
-        document.head.appendChild(this.leafletCSS);
-        this.leafletScript.onload = () => this.initializeMap();
-        document.body.appendChild(this.leafletScript);
     }
 
     setupDefaultMarkers() {
@@ -176,3 +159,5 @@ class LeafletMap {
 }
 
 const leafletMap = new LeafletMap(configuration);
+
+leafletMap.initialize();
