@@ -63,7 +63,7 @@ const safeJSONParse = (value, defaultValue) => {
 };
 
 const defaultMarkers = safeJSONParse(markersJSON, []);
-const pinnerMarkers = [];
+let pinnedMarkers = [];
 
 const leafletCSS = document.createElement("link");
 const leafletScript = document.createElement("script");
@@ -93,18 +93,30 @@ leafletScript.onload = () => {
             marker.openPopup();
         }
 
-        pinnerMarkers.push(marker);
+        pinnedMarkers.push(marker);
     }
+
+    function clearAllMarkers() {
+        for (const pinnedMarker of pinnedMarkers) {
+            map.removeLayer(pinnedMarker);
+        }
+
+        pinnedMarkers = [];
+    }
+
+    Liferay.fire("leaflet:init", { map, timestamp: new Date() });
 
     Liferay.on("leaflet:add_marker", (event) => {
         event.details.flat().forEach(addMarker);
     });
 
     Liferay.on("leaflet:fit_to_all_markers", () => {
-        const group = L.featureGroup(pinnerMarkers);
+        const group = L.featureGroup(pinnedMarkers);
 
         map.fitBounds(group.getBounds());
     });
+
+    Liferay.on("leaflet:clear_markers", () => clearAllMarkers());
 
     let tileLayer = tileLayers[mapTileLayer] || tileLayers.default;
 

@@ -24,7 +24,7 @@ const center = {
 
 const defaultMarkers = safeJSONParse(markersJSON, []);
 
-const pinnedMarkers = [];
+let pinnedMarkers = [];
 
 const waitForGoogle = () =>
     new Promise((resolve, reject) => {
@@ -104,9 +104,19 @@ googleMapsScript.onload = async () => {
             pinnedMarkers.push(marker);
         }
 
+        function clearAllMarkers() {
+            for (const pinnedMarker of pinnedMarkers) {
+                pinnedMarker.setMap(null);
+            }
+
+            pinnedMarkers = [];
+        }
+
         Liferay.on("google_maps:add_marker", (event) => {
             event.details.flat().forEach(addMarker);
         });
+
+        Liferay.on("google_maps:clear_markers", () => clearAllMarkers());
 
         Liferay.on("google_maps:fit_to_all_markers", () => {
             const bounds = new google.maps.LatLngBounds();

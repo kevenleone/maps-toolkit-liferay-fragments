@@ -21,7 +21,15 @@ const map = new mapboxgl.Map({
     zoom: Number.parseFloat(zoom),
 });
 
-const pinnedMarkers = [];
+let pinnedMarkers = [];
+
+function clearAllMarkers() {
+    for (const pinnedMarker of pinnedMarkers) {
+        pinnedMarker.remove();
+    }
+
+    pinnedMarkers = [];
+}
 
 function addMarker({ icon, fly, latitude, longitude, title, type }) {
     function plotMarker(element) {
@@ -77,6 +85,8 @@ function addMarker({ icon, fly, latitude, longitude, title, type }) {
 Liferay.on("mapbox:add_marker", (event) => {
     event.details.flat().forEach(addMarker);
 });
+
+Liferay.on("mapbox:clear_markers", () => clearAllMarkers());
 
 Liferay.on("mapbox:fit_to_all_markers", () => {
     const bounds = new mapboxgl.LngLatBounds();

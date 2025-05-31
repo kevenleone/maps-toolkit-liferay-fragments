@@ -45,7 +45,7 @@ H.ui.UI.createDefault(map, defaultLayers);
 
 const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-const pinnedMarkers = [];
+let pinnedMarkers = [];
 const defaultMarkers = safeJSONParse(configuration.markersJSON, []);
 
 function addMarker({ latitude, longitude, title }) {
@@ -69,9 +69,19 @@ function addMarker({ latitude, longitude, title }) {
     pinnedMarkers.push(marker);
 }
 
+function clearAllMarkers() {
+    for (const pinnedMarker of pinnedMarkers) {
+        map.removeObject(pinnedMarker);
+    }
+
+    pinnedMarkers = [];
+}
+
 Liferay.on("here_maps:add_marker", (event) => {
     event.details.flat().forEach(addMarker);
 });
+
+Liferay.on("here_maps:clear_markers", () => clearAllMarkers());
 
 Liferay.on("here_maps:fit_to_all_markers", () => {
     const bounds = new H.geo.Rect(
