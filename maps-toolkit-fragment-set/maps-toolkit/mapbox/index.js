@@ -1,124 +1,153 @@
-const {
-    accessToken = "",
-    mapStyle = "streets-v11",
-    latitude = 37.7749,
-    longitude = -122.4194,
-    markersJSON = "[]",
-    showUserLocation = false,
-    zoom = 15,
-} = configuration;
-
-if (!accessToken) {
-    throw new Error("Mapbox Access Token is missing");
+function safeJSONParse(value, defaultValue) {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return defaultValue;
+    }
 }
 
-mapboxgl.accessToken = accessToken;
+class MapboxMap {
+    constructor(configuration) {
+        this.accessToken = configuration.accessToken || "";
+        this.defaultMarkers = safeJSONParse(configuration.markersJSON, []);
+        this.markersJSON = configuration.markersJSON;
+        this.latitude = configuration.latitude || 37.7749;
+        this.longitude = configuration.longitude || -122.4194;
+        this.mapStyle = configuration.mapStyle || "streets-v11";
+        this.showUserLocation = configuration.showUserLocation ?? false;
+        this.zoom = configuration.zoom || 15;
 
-const map = new mapboxgl.Map({
-    container: "maps-toolkit-mapbox-map",
-    style: `mapbox://styles/mapbox/${mapStyle}`,
-    center: [Number.parseFloat(longitude), Number.parseFloat(latitude)],
-    zoom: Number.parseFloat(zoom),
-});
-
-let pinnedMarkers = [];
-
-function clearAllMarkers() {
-    for (const pinnedMarker of pinnedMarkers) {
-        pinnedMarker.remove();
+        // Instance properties
+        this.map = null;
+        this.pinnedMarkers = [];
     }
 
-    pinnedMarkers = [];
-}
+    addMarker({ icon, fly, latitude, longitude, title, type }) {
+        const plotMarker = (element) => {
+            const mapboxMarker = new mapboxgl.Marker(element)
+                .setLngLat([
+                    Number.parseFloat(longitude),
+                    Number.parseFloat(latitude),
+                ])
+                .addTo(this.map);
 
-function addMarker({ icon, fly, latitude, longitude, title, type }) {
-    function plotMarker(element) {
-        const mapboxMarker = new mapboxgl.Marker(element)
-            .setLngLat([
-                Number.parseFloat(longitude),
-                Number.parseFloat(latitude),
-            ])
-            .addTo(map);
+            if (fly) {
+                this.map.flyTo({
+                    center: [longitude, latitude],
+                    zoom: this.zoom,
+                    speed: 1.2,
+                    curve: 1.42,
+                });
+            }
 
-        if (fly) {
-            map.flyTo({
-                center: [longitude, latitude],
-                zoom,
-                speed: 1.2,
-                curve: 1.42,
-            });
+            if (title) {
+                mapboxMarker.setPopup(
+                    new mapboxgl.Popup({ offset: 25 }).setText(title)
+                );
+            }
+
+            this.pinnedMarkers.push(mapboxMarker);
+        };
+
+        const div = document.createElement("div");
+        div.className = "mapbox-marker";
+
+        if (type === "pin") {
+            return plotMarker();
         }
 
-        if (title) {
-            mapboxMarker.setPopup(
-                new mapboxgl.Popup({ offset: 25 }).setText(title)
+        if (icon) {
+            div.style.backgroundImage = `url(${icon})`;
+            div.style.width = "32px";
+            div.style.height = "32px";
+            div.style.backgroundSize = "cover";
+            div.style.borderRadius = "50%";
+        } else {
+            div.style.backgroundColor = "#3FB1CE";
+            div.style.width = "12px";
+            div.style.height = "12px";
+            div.style.borderRadius = "50%";
+        }
+
+        plotMarker(div);
+    }
+
+    clearAllMarkers() {
+        for (const pinnedMarker of this.pinnedMarkers) {
+            pinnedMarker.remove();
+        }
+        this.pinnedMarkers = [];
+    }
+
+    fitToAllMarkers() {
+        const bounds = new mapboxgl.LngLatBounds();
+        for (const pinnedMarker of this.pinnedMarkers) {
+            const lngLat = pinnedMarker.getLngLat();
+            bounds.extend([lngLat.lng, lngLat.lat]);
+        }
+        this.map.fitBounds(bounds, { padding: 50 });
+    }
+
+    initializeMap() {
+        if (!this.accessToken) {
+            throw new Error("Mapbox Access Token is missing");
+        }
+
+        mapboxgl.accessToken = this.accessToken;
+
+        this.map = new mapboxgl.Map({
+            container: "maps-toolkit-mapbox-map",
+            style: `mapbox://styles/mapbox/${this.mapStyle}`,
+            center: [
+                Number.parseFloat(this.longitude),
+                Number.parseFloat(this.latitude),
+            ],
+            zoom: Number.parseFloat(this.zoom),
+        });
+
+        this.map.addControl(new mapboxgl.NavigationControl());
+
+        this.setupDefaultMarkers();
+        this.setupEventListeners();
+        this.setupUserLocation();
+    }
+
+    setupDefaultMarkers() {
+        try {
+            for (const defaultMarker of this.defaultMarkers) {
+                this.addMarker(defaultMarker);
+            }
+        } catch (error) {
+            console.error("Invalid JSON in markers:", error);
+        }
+    }
+
+    setupEventListeners() {
+        Liferay.on("mapbox:add_marker", (event) => {
+            for (const marker of event.details.flat()) {
+                this.addMarker(marker);
+            }
+        });
+
+        Liferay.on("mapbox:clear_markers", () => this.clearAllMarkers());
+        Liferay.on("mapbox:fit_to_all_markers", () => this.fitToAllMarkers());
+    }
+
+    setupUserLocation() {
+        if (this.showUserLocation) {
+            this.map.addControl(
+                new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true,
+                    },
+                    trackUserLocation: true,
+                    showUserHeading: true,
+                })
             );
         }
-
-        pinnedMarkers.push(mapboxMarker);
     }
-
-    const div = document.createElement("div");
-
-    div.className = "mapbox-marker";
-
-    if (type === "pin") {
-        return plotMarker();
-    }
-
-    if (icon) {
-        div.style.backgroundImage = `url(${icon})`;
-        div.style.width = "32px";
-        div.style.height = "32px";
-        div.style.backgroundSize = "cover";
-        div.style.borderRadius = "50%";
-    } else {
-        div.style.backgroundColor = "#3FB1CE";
-        div.style.width = "12px";
-        div.style.height = "12px";
-        div.style.borderRadius = "50%";
-    }
-
-    plotMarker(div);
 }
 
-Liferay.on("mapbox:add_marker", (event) => {
-    event.details.flat().forEach(addMarker);
-});
+const mapboxMap = new MapboxMap(configuration);
 
-Liferay.on("mapbox:clear_markers", () => clearAllMarkers());
-
-Liferay.on("mapbox:fit_to_all_markers", () => {
-    const bounds = new mapboxgl.LngLatBounds();
-
-    for (const pinnedMarker of pinnedMarkers) {
-        bounds.extend([pinnedMarker.longitude, pinnedMarker.latitude]);
-    }
-
-    map.fitBounds(bounds, { padding: 50 });
-});
-
-if (showUserLocation) {
-    map.addControl(
-        new mapboxgl.GeolocateControl({
-            positionOptions: {
-                enableHighAccuracy: true,
-            },
-            // When active the map will receive updates to the device's location as it changes.
-            trackUserLocation: true,
-            // Draw an arrow next to the location dot to indicate which direction the device is heading.
-            showUserHeading: true,
-        })
-    );
-}
-
-map.addControl(new mapboxgl.NavigationControl());
-
-// Add markers
-try {
-    const markers = JSON.parse(markersJSON);
-
-    markers.forEach(addMarker);
-} catch (error) {
-    console.error("Invalid JSON in markers:", error);
-}
+mapboxMap.initializeMap();
