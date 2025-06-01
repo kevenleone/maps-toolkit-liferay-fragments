@@ -8,7 +8,6 @@ function safeJSONParse(value, defaultValue) {
 
 class HereMaps {
     constructor(configuration) {
-        // Configuration properties
         this.apiKey = configuration.apiKey;
         this.defaultMarkerIconURL = configuration.defaultMarkerIconURL;
         this.defaultMarkers = safeJSONParse(configuration.markersJSON, []);
@@ -17,17 +16,14 @@ class HereMaps {
         this.mapStyle = configuration.mapStyle || "normal";
         this.showMarker = configuration.showMarker ?? true;
         this.showUserLocation = configuration.showUserLocation ?? false;
-        this.zoom = Number.parseInt(configuration.zoom || "10");
+        this.zoom = configuration.zoom || 13;
 
-        // Instance properties
         this.defaultLayers = null;
         this.icon = null;
         this.map = null;
         this.pinnedMarkers = [];
         this.platform = null;
         this.ui = null;
-
-        this.initializePlatform();
     }
 
     addMarker({ latitude, longitude, title }) {
@@ -71,6 +67,7 @@ class HereMaps {
                 bounds[2],
                 bounds[3]
             );
+
             this.map.getViewModel().setLookAtData({ bounds: rect });
         }
     }
@@ -81,6 +78,7 @@ class HereMaps {
         });
 
         this.defaultLayers = this.platform.createDefaultLayers();
+
         this.mapType = {
             normal: this.defaultLayers.raster.normal.map,
             satellite: this.defaultLayers.raster.satellite.map,
@@ -100,6 +98,8 @@ class HereMaps {
                 pixelRatio: window.devicePixelRatio || 1,
             }
         );
+
+        new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
 
         this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
 
@@ -140,6 +140,7 @@ class HereMaps {
                     longitude: Number.parseFloat(coords.longitude),
                     title: "My Location",
                 });
+
                 this.map.setCenter({
                     lat: coords.latitude,
                     lng: coords.longitude,
@@ -149,6 +150,8 @@ class HereMaps {
     }
 
     initialize() {
+        this.initializePlatform();
+
         this.setupEventListeners();
         this.setupDefaultMarkers();
         this.setupUserLocation();

@@ -8,7 +8,6 @@ function safeJSONParse(value, defaultValue) {
 
 class GoogleMaps {
     constructor(configuration) {
-        // Configuration properties
         this.accessToken = configuration.accessToken;
         this.defaultMarkers = safeJSONParse(configuration.markersJSON, []);
         this.googleMapsScriptURL =
@@ -16,21 +15,21 @@ class GoogleMaps {
             "https://maps.googleapis.com/maps/api/js";
         this.latitude = configuration.latitude || 37.7749;
         this.longitude = configuration.longitude || -122.4194;
-        this.showMarker = configuration.showMarker ?? true;
-        this.showUserLocation = configuration.showUserLocation ?? false;
+        this.showMarker = configuration.showMarker;
+        this.showUserLocation = configuration.showUserLocation;
         this.zoom = configuration.zoom || 13;
 
-        // Instance properties
         this.center = {
             lat: Number.parseFloat(this.latitude),
             lng: Number.parseFloat(this.longitude),
         };
+
         this.infoWindow = null;
         this.map = null;
         this.pinnedMarkers = [];
     }
 
-    addMarker({ fly, latitude, longitude, title, icon }) {
+    addMarker({ baloonHTML, fly, icon, latitude, longitude, title }) {
         const position = {
             lat: Number.parseFloat(latitude),
             lng: Number.parseFloat(longitude),
@@ -44,8 +43,9 @@ class GoogleMaps {
         });
 
         marker.addListener("click", () => {
-            const content = `
-                <div>
+            const content =
+                baloonHTML ||
+                `<div>
                     <h6>${title}</h6>
                     <strong>Lat:</strong> ${latitude}, <strong>Lng:</strong> ${longitude}
                 </div>
@@ -71,9 +71,11 @@ class GoogleMaps {
 
     fitToAllMarkers() {
         const bounds = new google.maps.LatLngBounds();
+
         for (const pinnedMarker of this.pinnedMarkers) {
             bounds.extend(pinnedMarker.getPosition());
         }
+
         this.map.fitBounds(bounds);
     }
 
@@ -87,18 +89,18 @@ class GoogleMaps {
             }
         );
 
-        this.map.addListener("click", () => {
-            this.infoWindow.close();
-        });
+        this.map.addListener("click", () => this.infoWindow.close());
     }
 
     loadScript() {
         const googleMapsURL = new URL(this.googleMapsScriptURL);
+
         if (this.accessToken) {
             googleMapsURL.searchParams.set("key", this.accessToken);
         }
 
         const googleMapsScript = document.createElement("script");
+
         googleMapsScript.src = googleMapsURL.toString();
         googleMapsScript.async = true;
         googleMapsScript.defer = true;
@@ -106,6 +108,7 @@ class GoogleMaps {
         googleMapsScript.onload = async () => {
             try {
                 await this.waitForGoogle();
+
                 this.initializeMap();
                 this.setupEventListeners();
                 this.setupDefaultMarkers();
@@ -143,8 +146,8 @@ class GoogleMaps {
         if (this.showUserLocation && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(({ coords }) => {
                 this.addMarker({
-                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                     fly: true,
+                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                     latitude: Number.parseFloat(coords.latitude),
                     longitude: Number.parseFloat(coords.longitude),
                     title: "My Location",
@@ -156,6 +159,7 @@ class GoogleMaps {
     waitForGoogle() {
         return new Promise((resolve, reject) => {
             let maxRetries = 10;
+
             const interval = setInterval(() => {
                 if (window?.google?.maps) {
                     clearInterval(interval);
@@ -170,4 +174,5 @@ class GoogleMaps {
 }
 
 const googleMaps = new GoogleMaps(configuration);
+
 googleMaps.loadScript();

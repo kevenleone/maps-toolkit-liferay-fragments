@@ -10,14 +10,13 @@ class MapboxMap {
     constructor(configuration) {
         this.accessToken = configuration.accessToken || "";
         this.defaultMarkers = safeJSONParse(configuration.markersJSON, []);
-        this.markersJSON = configuration.markersJSON;
         this.latitude = configuration.latitude || 37.7749;
         this.longitude = configuration.longitude || -122.4194;
         this.mapStyle = configuration.mapStyle || "streets-v11";
+        this.markersJSON = configuration.markersJSON;
         this.showUserLocation = configuration.showUserLocation ?? false;
         this.zoom = configuration.zoom || 15;
 
-        // Instance properties
         this.map = null;
         this.pinnedMarkers = [];
     }
@@ -50,6 +49,7 @@ class MapboxMap {
         };
 
         const div = document.createElement("div");
+
         div.className = "mapbox-marker";
 
         if (type === "pin") {
@@ -76,15 +76,19 @@ class MapboxMap {
         for (const pinnedMarker of this.pinnedMarkers) {
             pinnedMarker.remove();
         }
+
         this.pinnedMarkers = [];
     }
 
     fitToAllMarkers() {
         const bounds = new mapboxgl.LngLatBounds();
+
         for (const pinnedMarker of this.pinnedMarkers) {
             const lngLat = pinnedMarker.getLngLat();
+
             bounds.extend([lngLat.lng, lngLat.lat]);
         }
+
         this.map.fitBounds(bounds, { padding: 50 });
     }
 
@@ -96,12 +100,12 @@ class MapboxMap {
         mapboxgl.accessToken = this.accessToken;
 
         this.map = new mapboxgl.Map({
-            container: "maps-toolkit-mapbox-map",
-            style: `mapbox://styles/mapbox/${this.mapStyle}`,
             center: [
                 Number.parseFloat(this.longitude),
                 Number.parseFloat(this.latitude),
             ],
+            container: "maps-toolkit-mapbox-map",
+            style: `mapbox://styles/mapbox/${this.mapStyle}`,
             zoom: Number.parseFloat(this.zoom),
         });
 
@@ -134,17 +138,19 @@ class MapboxMap {
     }
 
     setupUserLocation() {
-        if (this.showUserLocation) {
-            this.map.addControl(
-                new mapboxgl.GeolocateControl({
-                    positionOptions: {
-                        enableHighAccuracy: true,
-                    },
-                    trackUserLocation: true,
-                    showUserHeading: true,
-                })
-            );
+        if (!this.showUserLocation) {
+            return;
         }
+
+        this.map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: true,
+                showUserHeading: true,
+            })
+        );
     }
 }
 
