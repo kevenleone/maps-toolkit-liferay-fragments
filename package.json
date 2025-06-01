@@ -10,7 +10,8 @@
         "typescript": "^5.0.0"
     },
     "scripts": {
-        "build": "./scripts/deploy.sh",
+        "build": "./scripts/build.sh",
+        "deploy": "bun run build && ./scripts/deploy.sh",
         "watcher": "bun run scripts/watcher.ts"
     }
 }

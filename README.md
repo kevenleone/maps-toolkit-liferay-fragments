@@ -35,6 +35,11 @@ Integrates Mapbox maps into your Liferay pages. Requires a Mapbox Access Token a
 - **Show Marker** (`showMarker`, checkbox): Display a marker at the center (default: `true`).
 - **Show User Location** (`showUserLocation`, checkbox): Show the user's current location (default: `false`).
 
+**Events:**
+- `mapbox:add_marker` — Add marker(s) to the map
+- `mapbox:clear_markers` — Remove all markers from the map
+- `mapbox:fit_to_all_markers` — Fit the map view to all markers
+
 ---
 
 ## Google Maps
@@ -53,6 +58,11 @@ Embeds a Google Map with configurable center, zoom, and marker/user location dis
 - **Show User Location** (`showUserLocation`, checkbox): Show the user's current location (default: `false`).
 - **Google Maps Script URL** (`googleMapsScriptURL`, text): URL for loading the Google Maps script (default: `https://maps.googleapis.com/maps/api/js`).
 
+**Events:**
+- `google_maps:add_marker` — Add marker(s) to the map
+- `google_maps:clear_markers` — Remove all markers from the map
+- `google_maps:fit_to_all_markers` — Fit the map view to all markers
+
 ---
 
 ## Leaflet
@@ -68,6 +78,12 @@ Integrates the Leaflet open-source map library for simple, customizable maps.
 - **Zoom Level** (`zoom`, text): Initial zoom level (default: `13`).
 - **Show Marker** (`showMarker`, checkbox): Display a marker at the center (default: `true`).
 - **Show User Location** (`showUserLocation`, checkbox): Show the user's current location (default: `false`).
+
+**Events:**
+- `leaflet:init` — Fires when the Leaflet map is initialized
+- `leaflet:add_marker` — Add marker(s) to the map
+- `leaflet:clear_markers` — Remove all markers from the map
+- `leaflet:fit_to_all_markers` — Fit the map view to all markers
 
 ---
 
@@ -92,6 +108,11 @@ Integrates HERE Maps into your Liferay pages. Requires a HERE Maps API Key and s
   - Terrain (`terrain`)
 - **Custom Marker Icon URL** (`defaultMarkerIconURL`, text): URL for custom marker icon (default: `https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/solid/map-pin.svg`).
 - **Dynamic Markers** (`markersJSON`, text): JSON array of markers to display on the map (default: `[]`).
+
+**Events:**
+- `here_maps:add_marker` — Add marker(s) to the map
+- `here_maps:clear_markers` — Remove all markers from the map
+- `here_maps:fit_to_all_markers` — Fit the map view to all markers
 
 ---
 
