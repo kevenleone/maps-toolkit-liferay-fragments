@@ -138,7 +138,7 @@ class LeafletMap {
     }
 
     setupUserLocation() {
-        if (this.showUserLocation) {
+        if (!this.showUserLocation) {
             return;
         }
 
