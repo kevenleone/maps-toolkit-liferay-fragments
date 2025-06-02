@@ -1,12 +1,12 @@
 import { spawn } from "bun";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const watchFolder = path.join(__dirname, "..", "maps-toolkit-fragment-set");
 
 const DEPLOY_CHANGES_AFTER_MILISECONDS = 3000;
 
-const buildCommand = ["bun", "run", "build"];
+const buildCommand = ["bun", "run", "deploy"];
 
 let timeout: NodeJS.Timeout | null = null;
 

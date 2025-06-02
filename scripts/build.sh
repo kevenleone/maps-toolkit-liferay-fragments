@@ -1,5 +1,7 @@
 #!/bin/sh
 
+FOLDER_NAME=maps-toolkit-fragment-set
+
 mkdir -p "./build"
 
-zip -r "build/maps-toolkit-fragment-set" "./maps-toolkit-fragment-set"
+zip -r "build/$FOLDER_NAME.zip" "./$FOLDER_NAME"
